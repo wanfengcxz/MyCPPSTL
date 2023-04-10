@@ -9,7 +9,7 @@
 
 namespace stl {
 
-    template<class T, T v>
+    template<typename T, T v>
     struct m_integral_constant {
         static constexpr T value = v;
     };
@@ -24,7 +24,7 @@ namespace stl {
     // type traits
 
     // is_int
-    template<class T>
+    template<typename T>
     struct is_int : m_false_type {
     };
 
@@ -33,20 +33,26 @@ namespace stl {
     struct is_int<int> : m_true_type {
     };
 
+    template <typename, typename>
+    struct is_same : m_false_type {};
+
+    template <typename T>
+    struct is_same<T, T> : m_true_type {};
+
     // is_pair
 
     // --- forward declaration begin
-    template<class T1, class T2>
+    template<typename T1, typename T2>
     struct pair {
     };
     // --- forward declaration end
 
-    template<class T>
+    template<typename T>
     struct is_pair : m_false_type {
     };
 
     // specializations
-    template<class T1, class T2>
+    template<typename T1, typename T2>
     struct is_pair<pair<T1, T2>> : m_true_type {
     };
 
