@@ -43,8 +43,7 @@ namespace stl {
 
     // --- forward declaration begin
     template<typename T1, typename T2>
-    struct pair {
-    };
+    struct pair;    // 不能加{}; 因此此处只是一个声明
     // --- forward declaration end
 
     template<typename T>
