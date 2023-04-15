@@ -8,6 +8,8 @@
 // some iterators, struct and global functions
 
 #include <cstddef>
+#include <iostream>
+
 #include "type_traits.h"
 
 namespace stl {
@@ -41,6 +43,8 @@ namespace stl {
 
     // iterator traits
 
+    // 如果是内置类型，或者类中没有iterator_category则value为false
+    // 否则value为true
     template<class T>
     struct has_iterator_cat {
     private:
@@ -50,10 +54,14 @@ namespace stl {
         };
 
         template<class U>
-        static two test(...);
+        static two test(...) {
+            std::cout << "two char version" << std::endl;
+        };
 
         template<class U>
-        static char test(typename U::iterator_category * = 0);
+        static char test(typename U::iterator_category * = 0) {
+            std::cout << "one char version" << std::endl;
+        };
 
     public:
 
@@ -74,6 +82,8 @@ namespace stl {
         typedef typename Iterator::difference_type difference_type;
     };
 
+    // 这里只有当传入bool为true时（执行下面的特化），才会有iterator_category这个属性
+    // 否则推断错误
     template<class Iterator, bool>
     struct iterator_traits_helper {
     };
