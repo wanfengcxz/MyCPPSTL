@@ -27,31 +27,28 @@ namespace stl {
     }
 
     // 获取/释放 临时缓冲区
-    // FIXME: size_t -> ptrdiff_t
     template<class T>
-    pair<T *, size_t> get_buffer_help(size_t len, T *) {
-        if (len > static_cast<size_t>(INT_MAX / sizeof(T)))
+    pair<T *, ptrdiff_t> get_buffer_helper(ptrdiff_t len, T *) {
+        if (len > static_cast<ptrdiff_t>(INT_MAX / sizeof(T)))
             len = INT_MAX / sizeof(T);
         while (len > 0) {
             T *tmp = static_cast<T *>(malloc(static_cast<size_t>(len) * sizeof(T)));
-            if (tmp != nullptr) return pair<T *, size_t>(tmp, len);
-            len = len / 2;    // 申请失败时len减少一般
+            if (tmp)
+                return pair<T *, ptrdiff_t>(tmp, len);
+            len /= 2;  // 申请失败时减少 len 的大小
         }
-        return pair<T *, size_t>(nullptr, 0);
+        return pair<T *, ptrdiff_t>(nullptr, 0);
     }
 
     template<class T>
-    pair<T *, size_t> get_temporary_buffer(size_t len) {
-        //  return get_buffer_helper(len, static_cast<T*>(0));
-        return get_buffer_help(len, static_cast<T *>(nullptr));
+    pair<T *, ptrdiff_t> get_temporary_buffer(ptrdiff_t len) {
+        return get_buffer_helper(len, static_cast<T *>(0));
     }
 
     template<class T>
-    pair<T *, size_t> get_temporary_buffer(size_t len, T *) {
-        //  return get_buffer_helper(len, static_cast<T*>(0));
-        return get_buffer_help(len, static_cast<T *>(nullptr));
+    pair<T *, ptrdiff_t> get_temporary_buffer(ptrdiff_t len, T *) {
+        return get_buffer_helper(len, static_cast<T *>(0));
     }
-
 
     template<class T>
     void release_temporary_buffer(T *ptr) {
@@ -73,8 +70,11 @@ namespace stl {
         temporary_buffer(ForwardIterator first, ForwardIterator last);
 
         ~temporary_buffer() {
+            // destroy负责释放非平凡析构的类型，即会调用他的析构函数，否则什么都不做
             stl::destroy(buffer, buffer + len);
-            free(buffer);   // ???
+            // 如果destroy释放了非平凡析构类型，那么这里buffer为空，free什么都不做
+            // 否则，由free来释放这个平凡析构类型
+            free(buffer);
         }
 
     public:
@@ -102,10 +102,6 @@ namespace stl {
 
         void operator=(const temporary_buffer &);
     };
-
-    void allocate_buffer() {
-
-    }
 
     template<class ForwardIterator, class T>
     temporary_buffer<ForwardIterator, T>::temporary_buffer(ForwardIterator first, ForwardIterator last) {
