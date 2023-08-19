@@ -92,6 +92,25 @@ void test_iterator_traits() {
 
 }
 
+
+void fun(stl::bidirectional_iterator_tag){
+    std::cout << "this is bidirectional_iterator_tag" << std::endl;
+}
+
+void fun(stl::input_iterator_tag){
+    std::cout  << "this is input_iterator_tag" << std::endl;
+}
+
+void test_iterator_category(){
+    stl::input_iterator_tag inputIteratorC;
+    stl::bidirectional_iterator_tag bidirectionalIteratorC;
+    stl::forward_iterator_tag forwardIteratorC;
+
+    fun(inputIteratorC);
+    fun(bidirectionalIteratorC);
+    fun(forwardIteratorC);  // forward_iterator_tag的对象可以传给其父类的对象
+}
+
 class C {
 public:
     typedef stl::bidirectional_iterator_tag iterator_category;
@@ -115,7 +134,8 @@ int main() {
 //    cout << sizeof(test(0)) << endl;
 //    test_has_iterator_cat();
 //    test_iterator_traits();
-    test_is_bidirectional_iterator();
+//    test_is_bidirectional_iterator();
+    test_iterator_category();
 
     return 0;
 }
