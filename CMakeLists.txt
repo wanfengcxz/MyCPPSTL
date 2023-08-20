@@ -17,3 +17,6 @@ add_executable(test_construct test/test_construct.cpp)
 add_executable(test_utils test/test_utils.cpp)
 add_executable(test_algobase test/test_algobase.cpp)
 add_executable(test_memory test/test_memory.cpp)
+
+add_executable(test_functional test/test_functional.cpp)
+target_link_libraries(test_functional gtest gtest_main)
