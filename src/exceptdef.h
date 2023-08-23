@@ -12,7 +12,7 @@
 namespace stl
 {
 
-#define MYSTL_DEBUG(expr) \
+#define STL_DEBUG(expr) \
   assert(expr)
 
 #define THROW_LENGTH_ERROR_IF(expr, what) \

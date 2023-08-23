@@ -19,12 +19,15 @@ namespace stl {
 // uninitialized_copy
 // 把 [first, last) 上的内容复制到以 result 为起始处的空间，返回复制结束的位置
 /*****************************************************************************************/
+
+    // 有拷贝构造函数
     template<class InputIter, class ForwardIter>
     ForwardIter
     unchecked_uninit_copy(InputIter first, InputIter last, ForwardIter result, std::true_type) {
         return stl::copy(first, last, result);
     }
 
+    // 没有拷贝构造函数，使用构造函数替代
     template<class InputIter, class ForwardIter>
     ForwardIter unchecked_uninit_copy(InputIter first, InputIter last,
                                       ForwardIter result, std::false_type) {
@@ -127,6 +130,7 @@ namespace stl {
         return stl::fill_n(first, n, value);
     }
 
+    // value_type类型没有平凡拷贝构造函数，则需要在内存块上使用构造函数构造
     template<class ForwardIter, class Size, class T>
     ForwardIter
     unchecked_uninit_fill_n(ForwardIter first, Size n, const T &value, std::false_type) {
@@ -144,6 +148,8 @@ namespace stl {
     }
 
     template<class ForwardIter, class Size, class T>
+    // 分为两种情况 1.可以平凡拷贝赋值，那么不需要初始化，这种平凡类型可以使用=来赋值
+    // 2.不可以... 这种情况只能使用构造函数来进行初始化
     ForwardIter uninitialized_fill_n(ForwardIter first, Size n, const T &value) {
         return stl::unchecked_uninit_fill_n(first, n, value,
                                             std::is_trivially_copy_assignable<

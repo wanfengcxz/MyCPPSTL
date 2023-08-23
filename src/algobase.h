@@ -96,6 +96,7 @@ namespace stl {
     unchecked_copy(Tp *first, Tp *last, Up *result) {
         const auto n = static_cast<size_t>(last - first);
         if (n != 0)
+            // memmove在源区域和目标区域重叠时采用倒序拷贝，更安全 https://www.zhihu.com/question/264505093
             std::memmove(result, first, n * sizeof(Up));
         return result + n;
     }
@@ -387,6 +388,9 @@ namespace stl {
     }
 
     template<class ForwardIter, class T>
+    // 已经初始化过，那么可以通过拷贝构造函数或者=来赋值。
+    // 1. 迭代器是random，那么采用fill_n传入长度即可
+    // 2. 迭代器不是random，无法得到长度，那么使用for循环一个一个赋值
     void fill(ForwardIter first, ForwardIter last, const T &value) {
         fill_cat(first, last, value, iterator_category(first));
     }

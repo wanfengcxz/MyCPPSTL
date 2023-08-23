@@ -54,6 +54,7 @@ namespace stl {
     }
 
     template<class ForwardIter>
+    // 如果是平凡可析构 直接自动释放
     void destroy_cat(ForwardIter, ForwardIter, std::true_type) {}
 
     template<class ForwardIter>

@@ -24,6 +24,8 @@ namespace stl {
         typedef ptrdiff_t difference_type;
 
     public:
+
+        // 注意都是静态方法 直接通过类名调用
         static T *allocate();
 
         static T *allocate(size_type n);
@@ -50,16 +52,19 @@ namespace stl {
 
     template<class T>
     T *allocator<T>::allocate() {
+        // 只是分配了一定字节的堆空间（内存）
         return static_cast<T *>(::operator new(sizeof(T)));
     }
 
     template<class T>
     T *allocator<T>::allocate(size_type n) {
+        // 只是分配了一定字节的堆空间（内存）
         if (n == 0) return nullptr;
         return static_cast<T *>(::operator new(sizeof(T) * n));
     }
 
     template<class T>
+    // 摧毁new分配的内存空间
     void allocator<T>::deallocate(T *ptr) {
         if (ptr == nullptr) return;
         ::operator delete(ptr);
