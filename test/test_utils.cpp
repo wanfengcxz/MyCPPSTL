@@ -6,7 +6,8 @@
 
 #include "utils.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 class A {
 public:
@@ -52,20 +53,52 @@ void test_move() {
     cout << s2 << endl;
 
 //    std::string s3 = static_cast<std::string&&>(s2);
-    static_cast<std::string&&>(s2); // 这是一个右值
+    static_cast<std::string &&>(s2); // 这是一个右值
     cout << s2 << endl;         // s2中的内容并没有被移走
 
     A m = 2;
     A n = stl::move(m);
 }
 
-void test_forward() {
+namespace test_forward {
+    template<class T>
+    // 完美转发
+    T &&forward(typename std::remove_reference<T>::type &arg) noexcept {
+        if (std::is_same<T, int>::value) cout << "type &arg: T is int" << endl;
+        return static_cast<T &&>(arg);
+    }
 
-    int x = 3;
-    stl::forward<int>(x);
-    stl::forward<int>(2);
+    template<class T>
+    // 如果是个左值，肯定不会传入这个函数
+    T &&forward(typename std::remove_reference<T>::type &&arg) noexcept {
+        if (std::is_same<T, int>::value) cout << "type &&arg: T is int" << endl;
+        static_assert(!std::is_lvalue_reference<T>::value, "bad forward");
+        return static_cast<T &&>(arg);
+    }
 
 
+    void test_forward() {
+        int x = 3;
+
+        // error 因为右边是右值
+//        int &y = (std::forward<int>(x));
+//        int *p1 = &(std::forward<int>(x));
+//        int *p2 = &(std::forward<int>(2));
+        int &&z = std::forward<int>(x);
+        int &&n = std::forward<int>(3);
+
+        // 解释如下：
+        int a = 4;
+        forward<int>(a);
+        forward<int>(3);
+        /*
+         *  以上代码分别输出：
+         *      type &arg: T is int
+         *      type &&arg: T is int
+         *  可见两个forward中T都被推导为了int，因此在return时，
+         *  会通过static_cast<int&&>被转化为右值，因此无法被取地址
+         */
+    }
 }
 
 void test_swap() {
@@ -136,9 +169,11 @@ void other() {
 
 int main() {
 
-    A &&a = 2;  // A default constructor
+//    A &&a = 2;  // A default constructor
+//
+//    test_move();
 
-    test_move();
+    test_forward::test_forward();
 
     return 0;
 }
