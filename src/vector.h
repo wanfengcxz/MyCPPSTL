@@ -221,7 +221,7 @@ namespace stl {
         }
 
         template<class Iter, typename std::enable_if<
-                stl::is_input_iterator<Iter>::value, int> = 0>
+                stl::is_input_iterator<Iter>::value, int>::type = 0>
         void assign(Iter first, Iter last) {
             STL_DEBUG(!(last < first));
             copy_assign(first, last, iterator_category(first));
@@ -355,8 +355,7 @@ namespace stl {
         } else {
             stl::copy(rhs.begin(), rhs.begin() + size(), begin_);
             stl::uninitialized_copy(rhs.begin() + size(), rhs.end(), end_);
-            // TODO：cap_应该保持不变？？
-            cap_ = end_ = begin_ + len;
+            end_ = begin_ + len;
         }
     }
 
