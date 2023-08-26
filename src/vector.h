@@ -257,7 +257,7 @@ namespace stl {
         iterator insert(const_iterator pos, const value_type &value);
 
         iterator insert(const_iterator pos, value_type &&value) {
-            emplace_back(pos, stl::move(value));
+            return emplace(pos, stl::move(value));
         }
 
         iterator insert(const_iterator pos, size_type n, const value_type &value) {
