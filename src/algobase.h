@@ -108,7 +108,7 @@ namespace stl {
 
 /*****************************************************************************************/
 // copy_backward
-// 将 [first, last)区间内的元素拷贝到 [result - (last - first), result)内
+// 将 [first, last)区间内的元素拷贝到 [result - (last - first), result)内 倒着拷贝
 /*****************************************************************************************/
     // unchecked_copy_backward_cat 的 bidirectional_iterator_tag 版本
     template<class BidirectionalIter1, class BidirectionalIter2>
