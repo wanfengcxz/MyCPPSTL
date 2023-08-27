@@ -29,14 +29,14 @@ namespace stl {
     // 完美转发
     // 如果是个右值肯定不会传入这个函数
     T &&forward(typename std::remove_reference<T>::type &arg) noexcept {
-        std::cout << "T& forward" << std::endl;
+//        std::cout << "T& forward" << std::endl;
         return static_cast<T &&>(arg);
     }
 
     template<class T>
     // 如果是个左值，肯定不会传入这个函数
     T &&forward(typename std::remove_reference<T>::type &&arg) noexcept {
-        std::cout << "T&& forward" << std::endl;
+//        std::cout << "T&& forward" << std::endl;
         static_assert(!std::is_lvalue_reference<T>::value, "bad forward");
         return static_cast<T &&>(arg);
     }
