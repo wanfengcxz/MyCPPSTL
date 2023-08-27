@@ -384,7 +384,7 @@ namespace stl {
     template<class RandomIter, class T>
     void fill_cat(RandomIter first, RandomIter last, const T &value,
                   stl::random_access_iterator_tag) {
-        fill_n(first, last - first, value);
+        stl::fill_n(first, last - first, value);
     }
 
     template<class ForwardIter, class T>
