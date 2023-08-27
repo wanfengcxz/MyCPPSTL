@@ -57,10 +57,13 @@ namespace stl {
     // 如果是平凡可析构 直接自动释放
     void destroy_cat(ForwardIter, ForwardIter, std::true_type) {}
 
+    template<class Ty>
+    void destroy(Ty *pointer);
+
     template<class ForwardIter>
     void destroy_cat(ForwardIter first, ForwardIter end, std::false_type) {
         // 为什么要加&*
-        for (; first != end; first++) destroy_one(&*first);
+        for (; first != end; first++) destroy(&*first);
     }
 
     template<class Ty>
