@@ -36,3 +36,4 @@
 .idea
 cmake-build-debug/
 lib/
+!lib/config.txt
