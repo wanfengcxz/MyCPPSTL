@@ -35,5 +35,5 @@
 # mine
 .idea
 cmake-build-debug/
-lib/
+lib/*
 !lib/config.txt
