@@ -62,7 +62,8 @@ namespace stl {
 
     template<class ForwardIter>
     void destroy_cat(ForwardIter first, ForwardIter end, std::false_type) {
-        // 为什么要加&*
+        // 此处first为迭代器，通过*first得到迭代器指向的内容，然后再&
+        // 如果直接对first取地址则拿到的是迭代器的地址
         for (; first != end; first++) destroy(&*first);
     }
 
