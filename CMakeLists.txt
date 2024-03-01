@@ -26,3 +26,8 @@ target_link_libraries(test_vector gtest gtest_main)
 add_executable(test_uninitialized test/test_uninitialized.cpp)
 target_link_libraries(test_uninitialized gtest gtest_main)
 
+add_executable(test_operator_overload test/test_operator_overload.cpp)
+target_link_libraries(test_operator_overload gtest gtest_main)
+
+add_executable(test_deque test/test_deque.cpp)
+target_link_libraries(test_deque gtest gtest_main)
