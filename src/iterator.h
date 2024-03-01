@@ -16,7 +16,7 @@ namespace stl {
 
     // five types of iterators
     // 共性：
-    // 1. 比较两个迭代器是否相等（==、!=）
+    // 1. 比较两个迭代器是否相等（==、!=）output迭代器不能比较
     // 2. 箭头运算符（->），解引用迭代器，并提取对象的成员。
     // 特性
     // 1. 只能递增，即单向移动，只能读数据，只能用于单遍扫描算法
@@ -27,6 +27,9 @@ namespace stl {
     //  双向移动，可读可写，支持和一个整数值的加减运算（+、+=、-、-=）
     //  两个迭代器上的减法运算符（-），得到两个迭代器的距离。
     //  支持下标运算符（iter[n]）。可以用于多遍扫描算法
+
+    // basic_ostream就是一个output_iterator
+    // https://www.cnblogs.com/xuyd/p/17349731.html
     struct input_iterator_tag {
     };
 
@@ -205,6 +208,7 @@ namespace stl {
     // 以下函数用于计算迭代器间的距离
 
     // distance 的 input_iterator_tag 的版本
+    /// TODO:input_iterator只能访问一次，那么获取距离之后不就失效了吗？
     template<class InputIterator>
     typename iterator_traits<InputIterator>::difference_type
     distance_dispatch(InputIterator first, InputIterator last, input_iterator_tag) {
